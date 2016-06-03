@@ -16,11 +16,20 @@
 static BOOL isProvider=false;
 static BOOL isDataAvailable=false;
 
-@implementation WeemoPlugin{
+@implementation QBPlugin{
     
 
 }
 
+- (void) initQB:(CDVInvokedUrlCommand *)command
+{
+	
+	NSLog(@"I am going to initQB");
+	
+	[[self commandDelegate]sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"OK"]
+								 callbackId:command.callbackId];
+	
+}
 
 
 @end
