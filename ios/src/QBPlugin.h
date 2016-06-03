@@ -23,7 +23,7 @@
 @end
 
 //@interface WeemoPlugin : CDVPlugin <RtccDelegate, RtccCallDelegate, RtccAttendeeDelegate, HomeDelegate>
-@interface QBPlugin : CDVPlugin <HomeDelegate>
+@interface QBPlugin : CDVPlugin
 {
 
 }
