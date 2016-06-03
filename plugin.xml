@@ -357,7 +357,7 @@
 		<framework src="ios/libs/QuickbloxWebRTC.framework" custom="true" />
 
 		<config-file target="config.xml" parent="/*">
-			<feature name="Quickblox">
+			<feature name="videoPlugin">
 				<param name="ios-package" value="QBPlugin" />
 			</feature>
 		</config-file>
