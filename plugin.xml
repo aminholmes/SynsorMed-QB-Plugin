@@ -1,0 +1,365 @@
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	id="com.synsormed.qbplugin"
+	version="1.0.0">
+
+
+	<name>QB_Video</name>
+	<description>Quick Blox Video Plugin</description>
+	<author>SynsorMed</author>
+	<license>SynsorMed</license>
+	<repo>https://github.com/aminholmes/Synsormed-QB-Plugin.git</repo>
+	
+	<engines>
+		<engine name="cordova" version=">=3.1.0" />
+	</engines>
+
+
+	<js-module src="www/Quickblox.js" name="Quickblox">
+		<clobbers target="Quickblox" />
+	</js-module>
+
+	<platform name="android">
+	<!--
+		<source-file src="android/src/com/weemo/phonegap/RtccAndroidPhonegap.java" target-dir="src/com/weemo/phonegap" />
+		<source-file src="android/src/com/weemo/phonegap/CallContainer.java" target-dir="src/com/weemo/phonegap" />
+		<source-file src="android/src/com/weemo/phonegap/RtccCallActivity.java" target-dir="src/com/weemo/phonegap" />
+		<source-file src="android/src/com/weemo/phonegap/RtccCallFragment.java" target-dir="src/com/weemo/phonegap" />
+		<source-file src="android/src/com/weemo/phonegap/LoadingDialogFragment.java" target-dir="src/com/weemo/phonegap" />
+		<source-file src="android/src/com/weemo/phonegap/CheatSheet.java" target-dir="src/com/weemo/phonegap" />
+
+		<source-file src="android/src/com/weemo/phonegap/floating/FloatingWindow.java" target-dir="src/com/weemo/phonegap/floating" />
+		<source-file src="android/src/com/weemo/phonegap/floating/FloatingWindowListener.java" target-dir="src/com/weemo/phonegap/floating" />
+		<source-file src="android/src/com/weemo/phonegap/floating/IFloatingWindowInteraction.java" target-dir="src/com/weemo/phonegap/floating" />
+		<source-file src="android/src/com/weemo/phonegap/floating/IFloatingWindowSettings.java" target-dir="src/com/weemo/phonegap/floating" />
+		<source-file src="android/src/com/weemo/phonegap/floating/SnapLocation.java" target-dir="src/com/weemo/phonegap/floating" />
+		
+		<source-file src="android/src/net/rtccloud/helper/App.java" target-dir="src/net/rtccloud/helper" />
+		<source-file src="android/src/net/rtccloud/helper/MainActivity.java" target-dir="src/net/rtccloud/helper" />
+		
+		<source-file src="android/src/net/rtccloud/helper/controller/CallViewController.java" target-dir="src/net/rtccloud/helper/controller" />
+		<source-file src="android/src/net/rtccloud/helper/controller/FloatingWindowController.java" target-dir="src/net/rtccloud/helper/controller" />
+		<source-file src="android/src/net/rtccloud/helper/controller/FloatingWindowTouchController.java" target-dir="src/net/rtccloud/helper/controller" />
+		<source-file src="android/src/net/rtccloud/helper/controller/FullScreenController.java" target-dir="src/net/rtccloud/helper/controller" />
+		<source-file src="android/src/net/rtccloud/helper/controller/ScreenShareController.java" target-dir="src/net/rtccloud/helper/controller" />
+		<source-file src="android/src/net/rtccloud/helper/controller/StatusBarController.java" target-dir="src/net/rtccloud/helper/controller" />
+		
+		<source-file src="android/src/net/rtccloud/helper/fragment/AuthenticatedFragment.java" target-dir="src/net/rtccloud/helper/fragment" />
+		<source-file src="android/src/net/rtccloud/helper/fragment/BroadcastMeetingPointDialogFragment.java" target-dir="src/net/rtccloud/helper/fragment" />
+		<source-file src="android/src/net/rtccloud/helper/fragment/CallFragment.java" target-dir="src/net/rtccloud/helper/fragment" />
+		<source-file src="android/src/net/rtccloud/helper/fragment/CallingDialogFragment.java" target-dir="src/net/rtccloud/helper/fragment" />
+		<source-file src="android/src/net/rtccloud/helper/fragment/ConferencePanelFragment.java" target-dir="src/net/rtccloud/helper/fragment" />
+		<source-file src="android/src/net/rtccloud/helper/fragment/CreateMeetingPointDialogFragment.java" target-dir="src/net/rtccloud/helper/fragment" />
+		<source-file src="android/src/net/rtccloud/helper/fragment/LoginFragment.java" target-dir="src/net/rtccloud/helper/fragment" />
+		<source-file src="android/src/net/rtccloud/helper/fragment/ReconnectingDialogFragment.java" target-dir="src/net/rtccloud/helper/fragment" />
+		<source-file src="android/src/net/rtccloud/helper/fragment/RingingDialogFragment.java" target-dir="src/net/rtccloud/helper/fragment" />
+		
+		<source-file src="android/src/net/rtccloud/helper/listener/OnAuthenticatedFragmentListener.java" target-dir="src/net/rtccloud/helper/listener" />
+		<source-file src="android/src/net/rtccloud/helper/listener/OnCallControlClickListener.java" target-dir="src/net/rtccloud/helper/listener" />
+		<source-file src="android/src/net/rtccloud/helper/listener/OnCallFragmentListener.java" target-dir="src/net/rtccloud/helper/listener" />
+		<source-file src="android/src/net/rtccloud/helper/listener/OnFullScreenListener.java" target-dir="src/net/rtccloud/helper/listener" />
+		<source-file src="android/src/net/rtccloud/helper/listener/OnLoginFragmentListener.java" target-dir="src/net/rtccloud/helper/listener" />
+		<source-file src="android/src/net/rtccloud/helper/listener/OnStatusListener.java" target-dir="src/net/rtccloud/helper/listener" />
+		
+		<source-file src="android/src/net/rtccloud/helper/service/RtccNotifications.java" target-dir="src/net/rtccloud/helper/service" />
+		<source-file src="android/src/net/rtccloud/helper/service/RtccService.java" target-dir="src/net/rtccloud/helper/service" />
+		
+		<source-file src="android/src/net/rtccloud/helper/util/BackgroundTimer.java" target-dir="src/net/rtccloud/helper/util" />
+		<source-file src="android/src/net/rtccloud/helper/util/CheatSheet.java" target-dir="src/net/rtccloud/helper/util" />
+		<source-file src="android/src/net/rtccloud/helper/util/CustomReportSender.java" target-dir="src/net/rtccloud/helper/util" />
+		<source-file src="android/src/net/rtccloud/helper/util/Scheme.java" target-dir="src/net/rtccloud/helper/util" />
+		<source-file src="android/src/net/rtccloud/helper/util/Ui.java" target-dir="src/net/rtccloud/helper/util" />
+		<source-file src="android/src/net/rtccloud/helper/util/Util.java" target-dir="src/net/rtccloud/helper/util" />
+		
+		<source-file src="android/src/net/rtccloud/helper/view/CallControls.java" target-dir="src/net/rtccloud/helper/view" />
+		<source-file src="android/src/net/rtccloud/helper/view/ContactAdapter.java" target-dir="src/net/rtccloud/helper/view" />
+		<source-file src="android/src/net/rtccloud/helper/view/FloatLabelLayout.java" target-dir="src/net/rtccloud/helper/view" />
+-->
+<!-- This Section is for new RTCC SDK -->
+
+<!--
+		<source-file src="android/libs/rtcc-6.2.2.jar" target-dir="libs" />
+		<source-file src="android/libs/acra-4.5.0.jar" target-dir="libs" />
+		<source-file src="android/libs/android-support-v4.jar" target-dir="libs" />
+		<source-file src="android/libs/annotations.jar" target-dir="libs" />
+		<source-file src="android/libs/ANRWatchDog.jar" target-dir="libs" />
+		<source-file src="android/libs/volley.jar" target-dir="libs" />
+		<source-file src="android/libs/armeabi-v7a/libRtcc-6.2.2.so" target-dir="libs/armeabi-v7a" />
+-->		
+		
+		<!-- Resources -->
+<!--
+		<source-file src="android/res/animator/weemo_callcontrol_enter.xml" target-dir="res/animator" />
+		<source-file src="android/res/animator/weemo_callcontrol_exit.xml" target-dir="res/animator" />
+		<source-file src="android/res/animator/card_flip_left_in.xml" target-dir="res/animator" />
+		<source-file src="android/res/animator/card_flip_left_out.xml" target-dir="res/animator" />
+		<source-file src="android/res/animator/card_flip_right_in.xml" target-dir="res/animator" />
+		<source-file src="android/res/animator/card_flip_right_out.xml" target-dir="res/animator" />
+
+		<source-file src="android/res/drawable/background_holo_dark.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/weemo_ic_mic_dark.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/weemo_ic_mic_light.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/weemo_ic_speakers_dark.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/weemo_ic_speakers_light.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/weemo_ic_video_dark.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/weemo_ic_video_light.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/weemo_selectable_background.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/weemo_selectable_background_red.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/color_floatlabel.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_call_controls_camera.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_call_controls_fullscreen.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_call_controls_hangup.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_call_controls_micro.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_call_controls_scale.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_call_controls_share.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_call_controls_speakers.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_call_controls_patient_info.xml" target-dir="res/drawable" />
+		
+		<source-file src="android/res/drawable/ic_call_controls_video.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_conf_controls_deafen.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_conf_controls_handup.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/ic_conf_controls_mute.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/selectable_bg_blue.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/selectable_bg_green.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/selectable_bg_grey_transparent.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/selectable_bg_red_transparent.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/selectable_bg_red.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/statusbar_bg.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/statusbar_btn_selector.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/statusbar_btn_shape_focused.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/statusbar_btn_shape_selected.xml" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/video_in_shape.xml" target-dir="res/drawable" />
+		
+		<source-file src="android/res/drawable-hdpi/ic_launcher.png" target-dir="res/drawable-hdpi" />
+		<source-file src="android/res/drawable-hdpi/ic_navigation_drawer.png" target-dir="res/drawable-hdpi" />
+		<source-file src="android/res/drawable-hdpi/ic_notif_action_audio.png" target-dir="res/drawable-hdpi" />
+		<source-file src="android/res/drawable-hdpi/ic_notif_action_reject.png" target-dir="res/drawable-hdpi" />
+		<source-file src="android/res/drawable-hdpi/ic_notif_action_video.png" target-dir="res/drawable-hdpi" />
+		<source-file src="android/res/drawable-hdpi/ic_notif_ongoing_call.png" target-dir="res/drawable-hdpi" />
+		<source-file src="android/res/drawable-hdpi/ic_notif_ringing.png" target-dir="res/drawable-hdpi" />
+		<source-file src="android/res/drawable-hdpi/ic_statusbar_acquire.png" target-dir="res/drawable-hdpi" />
+		<source-file src="android/res/drawable-hdpi/ic_statusbar_call.png" target-dir="res/drawable-hdpi" />
+		<source-file src="android/res/drawable-hdpi/ic_statusbar_reply.png" target-dir="res/drawable-hdpi" />
+		<source-file src="android/res/drawable-hdpi/ic_statusbar_retry.png" target-dir="res/drawable-hdpi" />
+
+		
+		<source-file src="android/res/drawable-mdpi/ic_launcher.png" target-dir="res/drawable-mdpi" />
+		<source-file src="android/res/drawable-mdpi/ic_navigation_drawer.png" target-dir="res/drawable-mdpi" />
+		<source-file src="android/res/drawable-mdpi/ic_notif_action_audio.png" target-dir="res/drawable-mdpi" />
+		<source-file src="android/res/drawable-mdpi/ic_notif_action_reject.png" target-dir="res/drawable-mdpi" />
+		<source-file src="android/res/drawable-mdpi/ic_notif_action_video.png" target-dir="res/drawable-mdpi" />
+		<source-file src="android/res/drawable-mdpi/ic_notif_ongoing_call.png" target-dir="res/drawable-mdpi" />
+		<source-file src="android/res/drawable-mdpi/ic_notif_ringing.png" target-dir="res/drawable-mdpi" />
+		<source-file src="android/res/drawable-mdpi/ic_statusbar_acquire.png" target-dir="res/drawable-mdpi" />
+		<source-file src="android/res/drawable-mdpi/ic_statusbar_call.png" target-dir="res/drawable-mdpi" />
+		<source-file src="android/res/drawable-mdpi/ic_statusbar_reply.png" target-dir="res/drawable-mdpi" />
+		<source-file src="android/res/drawable-mdpi/ic_statusbar_retry.png" target-dir="res/drawable-mdpi" />
+
+
+		<source-file src="android/res/drawable-xhdpi/ic_action_camera_normal.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_conf_deafen_activated.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_conf_deafen_normal.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_conf_handup_activated.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_conf_handup_normal.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_conf_kick.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_conf_mute_activated.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_conf_mute_normal.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_patient_chart.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/back_to_call_view.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_hangup_normal.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_micro_activated.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_micro_normal.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_quality_activated.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_quality_normal.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_scale.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_share_activated.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_share_normal.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_speakers_activated.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_speakers_normal.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_video_activated.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_action_video_normal.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_dialog_ringing.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_divider_undo.9.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_launcher.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_navigation_drawer.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_notif_action_audio.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_notif_action_reject.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_notif_action_video.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_notif_ongoing_call.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_notif_ringing.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_statusbar_acquire.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_statusbar_call.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_statusbar_reply.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/ic_statusbar_retry.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_exit_red.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_headphones_dark.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/encryption.png" target-dir="res/drawable-xhdpi" />
+		
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_headphones_light.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_mic_muted_red.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_mic_not_muted_dark.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_mic_not_muted_light.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_switch_video_dark.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_switch_video_light.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_video_dark.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_video_light.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_video_muted_red.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_volume_on_dark.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_ic_action_volume_on_light.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_list_focused.9.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_list_pressed.9.png" target-dir="res/drawable-xhdpi" />
+		<source-file src="android/res/drawable-xhdpi/weemo_list_pressed_red.9.png" target-dir="res/drawable-xhdpi" />
+		
+		<source-file src="android/res/drawable-xxhdpi/ic_launcher.png" target-dir="res/drawable-xxhdpi" />
+		<source-file src="android/res/drawable-xxhdpi/ic_navigation_drawer.png" target-dir="res/drawable-xxhdpi" />
+		<source-file src="android/res/drawable-xxhdpi/ic_notif_action_audio.png" target-dir="res/drawable-xxhdpi" />
+		<source-file src="android/res/drawable-xxhdpi/ic_notif_action_reject.png" target-dir="res/drawable-xxhdpi" />
+		<source-file src="android/res/drawable-xxhdpi/ic_notif_action_video.png" target-dir="res/drawable-xxhdpi" />
+		<source-file src="android/res/drawable-xxhdpi/ic_notif_ongoing_call.png" target-dir="res/drawable-xxhdpi" />
+		<source-file src="android/res/drawable-xxhdpi/ic_notif_ringing.png" target-dir="res/drawable-xxhdpi" />
+		<source-file src="android/res/drawable-xxhdpi/ic_statusbar_acquire.png" target-dir="res/drawable-xxhdpi" />
+		<source-file src="android/res/drawable-xxhdpi/ic_statusbar_call.png" target-dir="res/drawable-xxhdpi" />
+		<source-file src="android/res/drawable-xxhdpi/ic_statusbar_reply.png" target-dir="res/drawable-xxhdpi" />
+		<source-file src="android/res/drawable-xxhdpi/ic_statusbar_retry.png" target-dir="res/drawable-xxhdpi" />
+
+		
+		<source-file src="android/res/drawable-xxxhdpi/ic_launcher.png" target-dir="res/drawable-xxxhdpi" />
+		
+		<source-file src="android/res/layout/activity_main.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/call_controls.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/dialog_create_meetingpoint.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/dialog_invite_meetingpoint.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/fragment_authenticated.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/fragment_call.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/fragment_conference_panel.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/fragment_conference.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/fragment_login.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/row_contact.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/weemo_fragment_call.xml" target-dir="res/layout" />
+		<source-file src="android/res/layout/weemo_layout_callcontrol.xml" target-dir="res/layout" />
+
+		<source-file src="android/res/layout-land/weemo_fragment_call.xml" target-dir="res/layout-land" />
+		
+		<source-file src="android/res/menu/main.xml" target-dir="res/menu" />
+
+		<source-file src="android/res/values/attrs.xml" target-dir="res/values" />
+		<source-file src="android/res/values/colors.xml" target-dir="res/values" />
+		<source-file src="android/res/values/dimens.xml" target-dir="res/values" />
+		<source-file src="android/res/values/integers.xml" target-dir="res/values" />
+		<source-file src="android/res/values/phonegap_dimens.xml" target-dir="res/values" />
+		<source-file src="android/res/values/phonegap_strings.xml" target-dir="res/values" />
+		<source-file src="android/res/values/phonegap_tablet.xml" target-dir="res/values" />
+		<source-file src="android/res/values/styles.xml" target-dir="res/values" />
+		<source-file src="android/res/values/weemo_attrs.xml" target-dir="res/values" />
+		<source-file src="android/res/values/weemo_strings.xml" target-dir="res/values" />
+		<source-file src="android/res/values/weemo_styles.xml" target-dir="res/values" />
+		<source-file src="android/res/values/weemo_values.xml" target-dir="res/values" />
+
+		<source-file src="android/res/values-sw600dp/dimens.xml" target-dir="res/values-sw600dp" />
+		<source-file src="android/res/values-sw600dp/phonegap_dimens.xml" target-dir="res/values-sw600dp" />
+		<source-file src="android/res/values-sw600dp/phonegap_tablet.xml" target-dir="res/values-sw600dp" />
+		<source-file src="android/res/values-sw600dp/styles.xml" target-dir="res/values-sw600dp" />
+
+		<source-file src="android/res/values-sw720dp/dimens.xml" target-dir="res/values-sw720dp" />
+		<source-file src="android/res/values-sw720dp/phonegap_tablet.xml" target-dir="res/values-sw720dp" />
+
+		<source-file src="android/res/values-v19/weemo_styles.xml" target-dir="res/values-v19" />
+
+
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="weemo">
+				<param name="android-package" value="com.weemo.phonegap.RtccAndroidPhonegap" />
+			</feature>
+		</config-file>
+
+		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.INTERNET" />
+			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+			<uses-permission android:name="android.permission.RECORD_AUDIO" />
+			<uses-permission android:name="android.permission.CAMERA" />
+			<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+			<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+		
+		</config-file>
+
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity
+				android:name="com.weemo.phonegap.RtccCallActivity"
+				android:theme="@style/weemo_call_theme"
+				android:screenOrientation="portrait">
+			</activity>
+		</config-file>
+-->
+	</platform>
+
+<!-- IOS Settings -->
+	<platform name="ios">
+<!--
+	    <header-file src="ios/src/WeemoPlugin.h" />
+		<source-file src="ios/src/WeemoPlugin.mm" />
+		
+		<resource-file src="ios/src/CallViewController.xib" />
+
+		<header-file src="ios/src/CallViewController.h" />
+		<source-file src="ios/src/CallViewController.m" />
+		
+		<header-file src="ios/src/AlertSystem.h" />
+		<source-file src="ios/src/AlertSystem.m" />
+		
+		<header-file src="ios/src/ContactListCell.h" />
+		<source-file src="ios/src/ContactListCell.m" />
+		
+		<header-file src="ios/src/HomeViewController.h" />
+		<source-file src="ios/src/HomeViewController.m" />
+		
+		<header-file src="ios/src/ParticipantsVC.h" />
+		<source-file src="ios/src/ParticipantsVC.m" />
+		
+		<header-file src="ios/src/Protocols.h" />
+		
+		<header-file src="ios/src/RtccDelegate.h" />
+		<source-file src="ios/src/RtccDelegate.m" />
+		
+		<header-file src="ios/src/UIView+ClearBackground.h" />
+		<source-file src="ios/src/UIView+ClearBackground.m" />
+		
+		<header-file src="ios/res/support/zipFile.h" />
+		<source-file src="ios/res/support/zipFile.m" />
+
+		<resource-file src="ios/res/pictures.xcassets" />
+		<resource-file src="ios/res/support/ipad.storyboard" />
+		<resource-file src="ios/res/support/iphone.storyboard" />
+		
+		<resource-file src="ios/res/support/SynsorMed-Prefix.pch" />
+
+		<framework src="AudioToolbox.framework" />
+		<framework src="CoreVideo.framework" />
+		<framework src="CoreMedia.framework" />
+		<framework src="QuartzCore.framework" />
+		<framework src="CFNetwork.framework" />
+		<framework src="AVFoundation.framework" />
+		<framework src="CoreGraphics.framework" />
+		<framework src="CoreImage.framework" />
+		<framework src="CoreTelephony.framework" />
+		<framework src="CoreLocation.framework" />
+		<framework src="GLKit.framework" />
+		<framework src="OpenGLES.framework" />
+		<framework src="UIKit.framework" />
+		<framework src="Foundation.framework" />
+		<framework src="CrashReporter.framework" />
+		<framework src="MessageUI.framework" />
+		<framework src="libz.dylib" />
+		<framework src="libc++.dylib" />
+		<framework src="ios/libs/RTCCSDK/RtccSDK.framework" custom="true" />
+		<framework src="ios/res/support/CrashReporter.framework" custom="true" />
+
+		<config-file target="config.xml" parent="/*">
+			<feature name="Quickblox">
+				<param name="ios-package" value="QBPlugin" />
+			</feature>
+		</config-file>
+
+		
+-->
+	</platform>
+</plugin>
