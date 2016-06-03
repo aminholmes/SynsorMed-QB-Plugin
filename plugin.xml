@@ -294,10 +294,10 @@
 
 <!-- IOS Settings -->
 	<platform name="ios">
-<!--
-	    <header-file src="ios/src/WeemoPlugin.h" />
-		<source-file src="ios/src/WeemoPlugin.mm" />
-		
+
+	    <header-file src="ios/src/QBPlugin.h" />
+		<source-file src="ios/src/QBPlugin.mm" />
+<!--		
 		<resource-file src="ios/src/CallViewController.xib" />
 
 		<header-file src="ios/src/CallViewController.h" />
