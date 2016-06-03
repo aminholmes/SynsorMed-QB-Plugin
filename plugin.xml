@@ -15,8 +15,8 @@
 	</engines>
 
 
-	<js-module src="www/Quickblox.js" name="Quickblox">
-		<clobbers target="Quickblox" />
+	<js-module src="www/Quickblox.js" name="videoPlugin">
+		<clobbers target="videoPlugin" />
 	</js-module>
 
 	<platform name="android">
