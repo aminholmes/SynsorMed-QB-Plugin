@@ -331,26 +331,28 @@
 		<resource-file src="ios/res/support/iphone.storyboard" />
 		
 		<resource-file src="ios/res/support/SynsorMed-Prefix.pch" />
-
-		<framework src="AudioToolbox.framework" />
-		<framework src="CoreVideo.framework" />
-		<framework src="CoreMedia.framework" />
-		<framework src="QuartzCore.framework" />
-		<framework src="CFNetwork.framework" />
-		<framework src="AVFoundation.framework" />
-		<framework src="CoreGraphics.framework" />
-		<framework src="CoreImage.framework" />
-		<framework src="CoreTelephony.framework" />
-		<framework src="CoreLocation.framework" />
-		<framework src="GLKit.framework" />
-		<framework src="OpenGLES.framework" />
-		<framework src="UIKit.framework" />
-		<framework src="Foundation.framework" />
-		<framework src="CrashReporter.framework" />
-		<framework src="MessageUI.framework" />
-		<framework src="libz.dylib" />
-		<framework src="libc++.dylib" />
 -->
+		<framework src="libicucore.tbd" />
+		<framework src="libc++.tbd" />
+		<framework src="libresolv.tbd" />
+		<framework src="libxml2.tbd" />
+		<framework src="libz.tbd" />
+		<framework src="CFNetwork.framework" />
+		<framework src="GLKit.framework" />
+		<framework src="MobileCoreServices.framework" />
+		<framework src="SystemConfiguration.framework" />
+		<framework src="VideoToolbox.framework" />
+		<framework src="AudioToolbox.framework" />
+		<framework src="Accelerate.framework" />
+		<framework src="CoreGraphics.framework" />
+		<framework src="CoreLocation.framework" />
+		<framework src="CoreData.framework" />
+		<framework src="CoreMedia.framework" />
+		<framework src="CoreVideo.framework" />
+		<framework src="AVFoundation.framework" />
+		<framework src="QuartzCore.framework" />
+		<framework src="Security.framework" />
+
 		<framework src="ios/libs/Quickblox.framework" custom="true" />
 		<framework src="ios/libs/QuickbloxWebRTC.framework" custom="true" />
 
