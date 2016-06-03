@@ -350,8 +350,9 @@
 		<framework src="MessageUI.framework" />
 		<framework src="libz.dylib" />
 		<framework src="libc++.dylib" />
-		<framework src="ios/libs/RTCCSDK/RtccSDK.framework" custom="true" />
-		<framework src="ios/res/support/CrashReporter.framework" custom="true" />
+-->
+		<framework src="ios/libs/Quickblox.framework" custom="true" />
+		<framework src="ios/libs/QuickbloxWebRTC.framework" custom="true" />
 
 		<config-file target="config.xml" parent="/*">
 			<feature name="Quickblox">
