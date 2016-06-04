@@ -6,6 +6,17 @@
 	 * Main Weemo interface
 	 */
 	var Weemo = {};
+	var videoPlugin = {};
+	
+	
+	
+	videoPlugin.initVideo = function()
+	{
+		console.log("I am about to go to native");
+		exec(null, null, "Quickblox", "initQB", []);
+	
+		
+	}
 
 	var e_INIT	= 0x0100;
 	var e_CONN	= 0x0200;
@@ -332,4 +343,4 @@
 		}
 	};
 
-	module.exports = Weemo;
+	module.exports = videoPlugin;
