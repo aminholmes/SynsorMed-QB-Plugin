@@ -25,7 +25,12 @@
 //@interface WeemoPlugin : CDVPlugin <RtccDelegate, RtccCallDelegate, RtccAttendeeDelegate, HomeDelegate>
 @interface QBPlugin : CDVPlugin
 {
+	
+	NSString *cb_authent;
+	
 
 }
+- (void)registerQBUser:(NSString *) username;
+
 
 @end
