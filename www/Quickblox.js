@@ -1,3 +1,4 @@
+cordova.define("com.synsormed.qbplugin.videoPlugin", function(require, exports, module) {
 
 	var exec = require("cordova/exec");
 
@@ -13,7 +14,7 @@
 	videoPlugin.initVideo = function()
 	{
 		console.log("I am about to go to native");
-		exec(null, null, "Quickblox", "initQB", []);
+		exec(null, null, "videoPlugin", "initQB", []);
 	
 		
 	}
@@ -222,8 +223,8 @@
 	 * @param Function success Callback called when connection has succeeded
 	 * @param Function error Callback called when connection has failed (With a Weemo.Error.*)
 	 */
-	Weemo.initialize = function(appID, success, error) {
-		exec(success, error, "weemo", "initialize", [appID]);
+	videoPlugin.initialize = function(appID, success, error) {
+		exec(success, error, "videoPlugin", "initQB", [appID]);
 	};
 
 	Weemo.getEngineStatus = function() {
@@ -247,8 +248,8 @@
 	 * @param Function success Callback called when connection has succeeded
 	 * @param Function error Callback called when connection has failed (Called with a Weemo.Error.*)
 	 */
-	Weemo.authenticate = function(token, type, success, error) {
-		exec(success, error, "weemo", "authent", [token, type]);
+	videoPlugin.authenticate = function(token, type, success, error) {
+		exec(success, error, "videoPlugin", "authent", [token, type]);
 	};
 
 	/**
@@ -344,3 +345,5 @@
 	};
 
 	module.exports = videoPlugin;
+
+});
