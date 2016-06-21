@@ -7,6 +7,8 @@
 //
 
 #import "QBPlugin.h"
+#import <Quickblox/Quickblox.h>
+#import <QuickbloxWebRTC/QuickbloxWebRTC.h>
 
 @class QBRTCSession;
 @class QBPlugin;

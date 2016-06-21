@@ -11,6 +11,8 @@
  */
 
 #import <Cordova/CDVPlugin.h>
+#import <Quickblox/Quickblox.h>
+#import <QuickbloxWebRTC/QuickbloxWebRTC.h>
 
 @class CallViewController;
 
