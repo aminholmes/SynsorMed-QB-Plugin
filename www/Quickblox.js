@@ -1,4 +1,4 @@
-cordova.define("com.synsormed.qbplugin.videoPlugin", function(require, exports, module) {
+
 
 	var exec = require("cordova/exec");
 
@@ -362,4 +362,4 @@ cordova.define("com.synsormed.qbplugin.videoPlugin", function(require, exports, 
 
 	module.exports = videoPlugin;
 
-});
+
