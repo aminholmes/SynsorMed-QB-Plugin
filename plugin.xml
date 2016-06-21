@@ -297,6 +297,8 @@
 
 	    <header-file src="ios/src/QBPlugin.h" />
 		<source-file src="ios/src/QBPlugin.mm" />
+		<header-file src="ios/src/CallViewController.h" />
+		<source-file src="ios/src/CallViewController.m" />
 <!--		
 		<resource-file src="ios/src/CallViewController.xib" />
 
@@ -332,11 +334,15 @@
 		
 		<resource-file src="ios/res/support/SynsorMed-Prefix.pch" />
 -->
-		<framework src="libicucore.tbd" />
-		<framework src="libc++.tbd" />
+
+		<resource-file src="ios/res/images.xcassets" />
+		<resource-file src="ios/res/support/VideoCall.storyboard" />
+		
+		<!--<framework src="libicucore.tbd" />
+		<framework src="libc++.tbd" />	
+		<framework src="libz.tbd" />-->
 		<framework src="libresolv.tbd" />
-		<framework src="libxml2.tbd" />
-		<framework src="libz.tbd" />
+		<framework src="libxml2.2.tbd" />
 		<framework src="CFNetwork.framework" />
 		<framework src="GLKit.framework" />
 		<framework src="MobileCoreServices.framework" />
@@ -348,6 +354,8 @@
 		<framework src="CoreLocation.framework" />
 		<framework src="CoreData.framework" />
 		<framework src="CoreMedia.framework" />
+		<framework src="CoreMotion.framework" />
+		<framework src="CoreTelephony.framework" />
 		<framework src="CoreVideo.framework" />
 		<framework src="AVFoundation.framework" />
 		<framework src="QuartzCore.framework" />

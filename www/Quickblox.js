@@ -265,8 +265,8 @@ cordova.define("com.synsormed.qbplugin.videoPlugin", function(require, exports, 
 	 * @param String userID The userID of the user to check
 	 * @param Function on Callback called when the answer is ready (Called with a Boolean)
 	 */
-	Weemo.getStatus = function(userID, on) {
-		exec(function(available) { available ? on(true) : on(false); }, null, "weemo", "getStatus", [userID]);
+	videoPlugin.getStatus = function(userID, on) {
+		exec(function(available) { available ? on(true) : on(false); }, null, "videoPlugin", "getStatus", [userID]);
 	};
 
 	/**
@@ -275,8 +275,8 @@ cordova.define("com.synsormed.qbplugin.videoPlugin", function(require, exports, 
 	 * @param Boolean isProvider , is provider accessing the call view
 	 * @param Boolean allowSwitch , allow switching to web view
 	 */
-	Weemo.createCall = function(userID,isProvider,allowSwitch) {
-		exec(null, null, "weemo", "createCall", [userID,isProvider,allowSwitch]);
+	videoPlugin.createCall = function(userID,isProvider,allowSwitch) {
+		exec(null, null, "videoPlugin", "createCall", [userID,isProvider,allowSwitch]);
 	};
 
 	/**
@@ -302,19 +302,33 @@ cordova.define("com.synsormed.qbplugin.videoPlugin", function(require, exports, 
    Weemo.getNetworkType = function(success, error) {
 			   exec(success, error, "weemo", "getNetworkType", []);
    };
+   
+   
+   videoPlugin.acceptCall = function(){
+   
+   		exec(null,null,"videoPlugin","acceptCall",[]);
+   
+   };
+   
+   videoPlugin.hangUp = function(){
+   
+   		exec(null,null,"videoPlugin","hangUp",[]);
+   
+   };
 
-	Weemo.internal = {
-		callCreated: function(callID, displayName) {
-			var call = new WeemoCall(callID, displayName);
-			calls[callID] = call;
-			Weemo.onCallCreated(call);
-			console.log("Just created WeemoJS Plugin Call");
+	videoPlugin.internal = {
+		callCreated: function(callID, status) {
+			//var call = new WeemoCall(callID, displayName);
+			//calls[callID] = call;
+			//Weemo.onCallCreated(call);
+			console.log("Incoming call: JS, status is: " + status);
+			angular.element(document.querySelector('#pageContainer')).scope().$broadcast('callchange',status);
 		},
 
 		callStatusChanged: function(callID, status) {
             console.log("Call status just changed in JS to: " + status);
-               console.log("The callID in js is: " + callID);
-			var call = calls[callID];
+               //console.log("The callID in js is: " + callID);
+			/*var call = calls[callID];
                if (!call) {
                console.log("Call does not exist in js. Returning");
                return ;
@@ -325,6 +339,8 @@ cordova.define("com.synsormed.qbplugin.videoPlugin", function(require, exports, 
                }
 			call._setCallStatus(status);
 			call.onCallStatusChanged(status);
+			*/
+			angular.element(document.querySelector('#pageContainer')).scope().$broadcast('callchange',status);
 
 		},
 
