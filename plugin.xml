@@ -338,9 +338,9 @@
 		<resource-file src="ios/res/images.xcassets" />
 		<resource-file src="ios/res/VideoCall.storyboard" />
 		
-		<!--<framework src="libicucore.tbd" />
-		<framework src="libc++.tbd" />	
+		<!--<framework src="libicucore.tbd" />	
 		<framework src="libz.tbd" />-->
+		<framework src="libc++.tbd" />
 		<framework src="libresolv.tbd" />
 		<framework src="libxml2.2.tbd" />
 		<framework src="CFNetwork.framework" />
