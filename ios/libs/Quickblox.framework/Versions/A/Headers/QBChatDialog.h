@@ -115,7 +115,7 @@ typedef void(^QBChatDialogOccupantUpdateBlock)(NSUInteger userID);
 @property (nonatomic, copy, QB_NULLABLE_PROPERTY) QBChatDialogOccupantUpdateBlock onUpdateOccupant;
 
 /**  Constructor */
-- (QB_NONNULL instancetype)initWithDialogID:(QB_NULLABLE NSString *)dialogID type:(enum QBChatDialogType)type;
+- (QB_NONNULL instancetype)initWithDialogID:(QB_NULLABLE NSString *)dialogID type:(QBChatDialogType)type;
 
 /**
  *  'init' is not a supported initializer for this class.

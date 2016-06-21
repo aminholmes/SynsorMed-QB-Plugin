@@ -11,8 +11,7 @@
  */
 
 #import <Cordova/CDVPlugin.h>
-#import <Quickblox/Quickblox.h>
-#import <QuickbloxWebRTC/QuickbloxWebRTC.h>
+#import "CallViewController.h"
 
 @class CallViewController;
 
@@ -25,14 +24,32 @@
 @end
 
 //@interface WeemoPlugin : CDVPlugin <RtccDelegate, RtccCallDelegate, RtccAttendeeDelegate, HomeDelegate>
-@interface QBPlugin : CDVPlugin
+@interface QBPlugin : CDVPlugin <QBRTCClientDelegate>
 {
 	
+	CallViewController *cvc_active;
 	NSString *cb_authent;
-	
+	NSString *cb_getStatus;
+	QBRTCSession *currentSession;
+	QBRTCVideoTrack *remoteVideoTrack;
+	UIViewController *rootController;
+	UIView *rootView;
+	BOOL isProvider;
+	NSString *dialogID;
+	NSMutableSet *matchedDialogIDs;
+	int currentPatientID;
+	BOOL camInitialized;
 
 }
++ (id)instance;
 - (void)registerQBUser:(NSString *) username;
+- (void) endCallJS;
+-(void) createChatDialog:(NSString *) dialogName;
+-(void) deleteChatDialog:(NSMutableSet *)mydialogIDs;
+- (BOOL) getProviderStatus;
+-(void)clearCVC;
+- (void) goBackToWaitJS;
+
 
 
 @end
