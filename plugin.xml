@@ -336,7 +336,7 @@
 -->
 
 		<resource-file src="ios/res/images.xcassets" />
-		<resource-file src="ios/res/support/VideoCall.storyboard" />
+		<resource-file src="ios/res/VideoCall.storyboard" />
 		
 		<!--<framework src="libicucore.tbd" />
 		<framework src="libc++.tbd" />	
