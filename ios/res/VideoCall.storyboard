@@ -4,6 +4,15 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="VAGRoundedStd-Bold.otf">
+            <string>VAGRoundedStd-Bold</string>
+        </mutableArray>
+        <mutableArray key="VAGRoundedStd-Light.otf">
+            <string>VAGRoundedStd-Light</string>
+            <string>VAGRoundedStd-Light</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--Call View Controller-->
         <scene sceneID="k2C-8B-b81">
@@ -18,16 +27,20 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calling Patient" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MKe-Ne-NVU" userLabel="CallingLabel">
-                                        <rect key="frame" x="0.0" y="50" width="400" height="21"/>
+                                        <rect key="frame" x="0.0" y="50" width="400" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="VAGRoundedStd-Bold" family="VAG Rounded Std" pointSize="30"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eR1-ha-bQU" userLabel="CallingHangup">
-                                        <rect key="frame" x="0.0" y="100" width="400" height="30"/>
+                                        <rect key="frame" x="125" y="120" width="150" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Hang Up"/>
+                                        <color key="backgroundColor" red="0.94117647059999998" green="0.36862745099999999" blue="0.2274509804" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="VAGRoundedStd-Light" family="VAG Rounded Std" pointSize="15"/>
+                                        <state key="normal" title="Hang Up">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
                                         <connections>
                                             <action selector="callinghangup:" destination="8RJ-gi-dfC" eventType="touchUpInside" id="zXt-do-fBo"/>
                                         </connections>
@@ -38,6 +51,16 @@
                             <view contentMode="scaleToFill" id="DbR-Nd-TRk" userLabel="VideoIn" customClass="QBRTCRemoteVideoView">
                                 <rect key="frame" x="-4" y="0.0" width="328" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oa3-zK-VRW">
+                                        <rect key="frame" x="60" y="25" width="200" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="VAGRoundedStd-Light" family="VAG Rounded Std" pointSize="10"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
                             </view>
                             <view contentMode="center" id="keS-qE-Gus" userLabel="MenuBar">
                                 <rect key="frame" x="50" y="450" width="460" height="120"/>
@@ -85,7 +108,6 @@
                             <view contentMode="scaleToFill" id="fXa-lJ-9gC" userLabel="VideoOut">
                                 <rect key="frame" x="300" y="300" width="150" height="150"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.36862745099999999" blue="0.2274509804" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
                     </view>
@@ -95,6 +117,7 @@
                         <outlet property="b_mic" destination="8aK-WM-a1u" id="4fQ-R2-tyd"/>
                         <outlet property="b_switch" destination="Qhk-ul-BLZ" id="QhB-Bd-UNY"/>
                         <outlet property="b_video" destination="4sK-Tf-eIy" id="eJU-1a-pfV"/>
+                        <outlet property="l_callTimer" destination="oa3-zK-VRW" id="7hU-kh-86Y"/>
                         <outlet property="l_callinglabel" destination="MKe-Ne-NVU" id="3ky-Pr-sD2"/>
                         <outlet property="v_callingview" destination="hBZ-Xk-Cot" id="9O2-5m-ZRz"/>
                         <outlet property="v_mainview" destination="iyz-ST-JVr" id="iZh-2F-ycI"/>
