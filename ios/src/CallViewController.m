@@ -155,7 +155,7 @@ const NSTimeInterval kRefreshTimeInterval = 1.f;
 	
 	//Position cover screeen until call is ready
 	coverView = [[UIView alloc] initWithFrame:self.view.bounds];
-	[coverView setBackgroundColor:[UIColor yellowColor]];
+	[coverView setBackgroundColor:[UIColor colorWithRed:0.024 green:0.671 blue:0.643 alpha:1]];
 	coverView.tag = 86;
 	[self.view insertSubview:coverView atIndex:80];
 	[self.view bringSubviewToFront:coverView];
@@ -174,6 +174,7 @@ const NSTimeInterval kRefreshTimeInterval = 1.f;
 	[super viewDidAppear:animated];
 	
 	NSLog(@">>>> Inside View Did Appear");
+	_timeDuration = 0;
 	[self configureGUI];
 	
 	
@@ -182,6 +183,7 @@ const NSTimeInterval kRefreshTimeInterval = 1.f;
 		NSLog(@"This is provider in CVC, going to make call");
 		[self startCall:patientsToCall];
 		callStatus = @"RINGING";
+		
 		
 	}else{
 		
@@ -336,6 +338,8 @@ const NSTimeInterval kRefreshTimeInterval = 1.f;
 	[statusLabel setTextColor:[UIColor redColor]];
 	[coverView addSubview:statusLabel];
 	 */
+	_v_callingview.layer.cornerRadius = 10;
+	_v_callingview.layer.masksToBounds = YES;
 	[_v_callingview setHidden:NO];
 	[self.view bringSubviewToFront:_v_callingview];
 }
@@ -364,6 +368,12 @@ const NSTimeInterval kRefreshTimeInterval = 1.f;
 	[_b_mic setCenter:CGPointMake(5*([UIScreen mainScreen].bounds.size.width)/8, 60.0)];
 	[_b_hangup setCenter:CGPointMake(7*([UIScreen mainScreen].bounds.size.width)/8, 60.0)];
 	
+	//Clear button backgrounds
+	[_b_switch setBackgroundColor:[UIColor clearColor]];
+	[_b_video setBackgroundColor:[UIColor clearColor]];
+	[_b_mic setBackgroundColor:[UIColor clearColor]];
+	[_b_hangup setBackgroundColor:[UIColor clearColor]];
+	
 	//Position Self View
 	
 	[_v_videoout setCenter:CGPointMake([UIScreen mainScreen].bounds.size.width - 85.0, [UIScreen mainScreen].bounds.size.height-200.0)];
@@ -386,8 +396,10 @@ const NSTimeInterval kRefreshTimeInterval = 1.f;
 		NSLog(@"The width of the Iphone screen is: %f", [UIScreen mainScreen].nativeBounds.size.width);
 		
 		//Shrink the self view by 50 pixels
-		[_v_videoout setBounds:CGRectMake(_v_videoout.bounds.origin.x + 50.0, _v_videoout.bounds.origin.y + 50.0,
+		[_v_videoout setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 120.0,
+										 [UIScreen mainScreen].bounds.size.height- 220.0,
 										  100.0, 100.0)];
+	
 		
 		
 	}
@@ -515,6 +527,10 @@ const NSTimeInterval kRefreshTimeInterval = 1.f;
 	[cameraCapture stopSession];
 	cameraCapture = nil;
 	camInitialized = NO;
+	
+	//Clear the call timer
+	[self.callTimer invalidate];
+	self.callTimer = nil;
 	
 	
 	//if the user is a patient, totally disable QB on exit
@@ -693,7 +709,7 @@ NSInteger QBRTCGetCpuUsagePercentage() {
 	mediaStream.videoTrack.videoCapture = cameraCapture;
 	
 	[_v_videoout.layer insertSublayer:myVideoLayer atIndex:0];
-	[[_v_videoout.layer.sublayers objectAtIndex:0] setBounds:_v_videoout.bounds];
+	[_v_videoout.layer.sublayers objectAtIndex:0].frame = _v_videoout.bounds;
 	
 }
 /**
@@ -760,6 +776,7 @@ NSInteger QBRTCGetCpuUsagePercentage() {
 - (void)didReceiveNewSession:(QBRTCSession *)session userInfo:(NSDictionary *)userInfo
 {
 	
+	callStatus = @"PROCEEDING";
 	currentSession = session;
 	
 }
@@ -790,14 +807,14 @@ NSInteger QBRTCGetCpuUsagePercentage() {
 	
 	QBRTCRemoteVideoView *remoteVideoView = nil;
 	remoteVideoView = [[QBRTCRemoteVideoView alloc] initWithFrame:self.view.bounds];
-	[remoteVideoView setBackgroundColor:[UIColor greenColor]];
+	[remoteVideoView setBackgroundColor:[UIColor blackColor]];
 	NSLog(@"The default content mode is: %ld", (long)remoteVideoView.contentMode);
 	remoteVideoView.contentMode = UIViewContentModeTop; //UIViewContentModeScaleAspectFill;
 	NSLog(@"The changed content mode is: %ld", (long)remoteVideoView.contentMode);
 	[remoteVideoView setVideoTrack:videoTrack];
 	remoteVideoView.tag = 76;
 	[self.view insertSubview:remoteVideoView aboveSubview:_v_videoin];
-	
+	[self.view insertSubview:_l_callTimer aboveSubview:remoteVideoView];
 
 	//_v_videoin.contentMode = UIViewContentModeScaleAspectFit;
 	//[_v_videoin setFrame:self.view.bounds];
@@ -842,7 +859,7 @@ NSInteger QBRTCGetCpuUsagePercentage() {
 	
 	
 	//Temporarily mute call for testing:
-	currentSession.localMediaStream.audioTrack.enabled = NO;
+	//currentSession.localMediaStream.audioTrack.enabled = NO;
 	
 	//Now that call is ready, remove the coverview
 	[coverView setHidden:YES];
@@ -858,6 +875,19 @@ NSInteger QBRTCGetCpuUsagePercentage() {
 		NSLog(@"Going to route sound through speaker");
 		[QBRTCSoundRouter instance].currentSoundRoute = QBRTCSoundRouteSpeaker;
 	}
+	
+	//Start the CallTimer
+	
+	if (!self.callTimer) {
+		
+		self.callTimer = [NSTimer scheduledTimerWithTimeInterval:kRefreshTimeInterval
+														  target:self
+														selector:@selector(refreshCallTime:)
+														userInfo:nil
+														 repeats:YES];
+	}
+	
+	
 	
 	/*
 	NSParameterAssert(self.session == session);
@@ -884,36 +914,26 @@ NSInteger QBRTCGetCpuUsagePercentage() {
 	 */
 }
 
-/**
- *  Called in case when connection state changed
- */
-- (void)session:(QBRTCSession *)session connectionClosedForUser:(NSNumber *)userID {
+- (void)session:(QBRTCSession *)session hungUpByUser:(NSNumber *)userID userInfo:(NSDictionary *)userInfo
+{
 	
-	//Only do a full cleanup if the caller was already in an active call
-	if (session == currentSession && [callStatus isEqualToString:@"ACTIVE"]) {
+	NSLog(@"The other user hung up first, so I need to exit. I'm in CVC");
+	
+	if(currentSession == session && [callStatus isEqualToString:@"ACTIVE"]){
+		callStatus = @"ENDED";
+		//[self cleanUP];
 		
-		[self cleanUP];
-		
-		/*
-		[self performUpdateUserID:userID block:^(OpponentCollectionViewCell *cell) {
-			cell.connectionState = [self.session connectionStateForUser:userID];
-			[self.videoViews removeObjectForKey:userID];
-			[cell setVideoView:nil];
-		}];
-		 */
-	}else{
-		
-		//The call did not go active, so just tell JS to got back to waiting room
-		[myQBPlugin goBackToWaitJS];
 		
 	}
-	 
+	
 }
 
 /**
  *  Called in case when disconnected from opponent
  */
 - (void)session:(QBRTCSession *)session disconnectedFromUser:(NSNumber *)userID {
+	
+	NSLog(@"Temporarily Disconnected. Waiting for reconnect");
 	/*
 	if (session == self.session) {
 		
@@ -928,6 +948,10 @@ NSInteger QBRTCGetCpuUsagePercentage() {
  *  Called in case when disconnected by timeout
  */
 - (void)session:(QBRTCSession *)session disconnectedByTimeoutFromUser:(NSNumber *)userID {
+	
+	NSLog(@"Disconnected too long. Timeout reached");
+	
+	callStatus = @"ENDED";
 	/*
 	if (session == self.session) {
 		
@@ -956,12 +980,43 @@ NSInteger QBRTCGetCpuUsagePercentage() {
 	 */
 }
 
+
+/**
+ *  Called in case when connection state changed
+ */
+- (void)session:(QBRTCSession *)session connectionClosedForUser:(NSNumber *)userID {
+	
+	NSLog(@"Connection status changed either up or down");
+		
+		/*
+		 [self performUpdateUserID:userID block:^(OpponentCollectionViewCell *cell) {
+			cell.connectionState = [self.session connectionStateForUser:userID];
+			[self.videoViews removeObjectForKey:userID];
+			[cell setVideoView:nil];
+		 }];
+		 */
+	
+}
+
+
 /**
  *  Called in case when session will close
  */
 - (void)sessionDidClose:(QBRTCSession *)session {
 	
 	NSLog(@"Inside %s",__FUNCTION__);
+	
+	//Only do a full cleanup if the caller was already in an active call or was ended on purpose
+	if (session == currentSession && ([callStatus isEqualToString:@"ACTIVE"] || [callStatus isEqualToString:@"ENDED"]) ) {
+		
+		[self cleanUP];
+
+	}else{
+		
+		//The call did not go active, so just tell JS to got back to waiting room
+		[myQBPlugin goBackToWaitJS];
+		
+	}
 	
 	//Turn off sound router
 	[QBRTCSoundRouter.instance deinitialize];
@@ -996,22 +1051,6 @@ NSInteger QBRTCGetCpuUsagePercentage() {
 }
 
 
-
-
-- (void)session:(QBRTCSession *)session hungUpByUser:(NSNumber *)userID userInfo:(NSDictionary *)userInfo
-{
-	
-	NSLog(@"The other user hung up first, so I need to exit. I'm in CVC");
-	
-	if(currentSession == session && [callStatus isEqualToString:@"ACTIVE"]){
-		
-		[self cleanUP];
-		
-		
-	}
-	
-}
-
 #pragma mark - Timers actions
 
 - (void)playCallingSound:(id)sender {
@@ -1022,14 +1061,14 @@ NSInteger QBRTCGetCpuUsagePercentage() {
 - (void)refreshCallTime:(NSTimer *)sender {
 	
 	self.timeDuration += kRefreshTimeInterval;
-	self.title = [NSString stringWithFormat:@"Call time - %@", [self stringWithTimeDuration:self.timeDuration]];
+	_l_callTimer.text = [NSString stringWithFormat:@"Call Duration: %@", [self stringWithTimeDuration:self.timeDuration]];
+
 }
 
 - (NSString *)stringWithTimeDuration:(NSTimeInterval )timeDuration {
 	
 	NSInteger minutes = timeDuration / 60;
 	NSInteger seconds = (NSInteger)timeDuration % 60;
-	
 	NSString *timeStr = [NSString stringWithFormat:@"%ld:%02ld", (long)minutes, (long)seconds];
 	
 	return timeStr;

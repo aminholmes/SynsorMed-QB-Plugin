@@ -55,6 +55,7 @@
 @property (weak, nonatomic) IBOutlet UIView *v_callingview;
 @property (weak, nonatomic) IBOutlet UILabel *l_callinglabel;
 @property (weak, nonatomic) IBOutlet UIButton *b_callinghangup;
+@property (weak, nonatomic) IBOutlet UILabel *l_callTimer;
 
 
 
