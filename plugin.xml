@@ -20,7 +20,7 @@
 	</js-module>
 
 	<platform name="android">
-	<!--
+	
 		<source-file src="android/src/com/weemo/phonegap/RtccAndroidPhonegap.java" target-dir="src/com/weemo/phonegap" />
 		<source-file src="android/src/com/weemo/phonegap/CallContainer.java" target-dir="src/com/weemo/phonegap" />
 		<source-file src="android/src/com/weemo/phonegap/RtccCallActivity.java" target-dir="src/com/weemo/phonegap" />
@@ -74,10 +74,10 @@
 		<source-file src="android/src/net/rtccloud/helper/view/CallControls.java" target-dir="src/net/rtccloud/helper/view" />
 		<source-file src="android/src/net/rtccloud/helper/view/ContactAdapter.java" target-dir="src/net/rtccloud/helper/view" />
 		<source-file src="android/src/net/rtccloud/helper/view/FloatLabelLayout.java" target-dir="src/net/rtccloud/helper/view" />
--->
+
 <!-- This Section is for new RTCC SDK -->
 
-<!--
+
 		<source-file src="android/libs/rtcc-6.2.2.jar" target-dir="libs" />
 		<source-file src="android/libs/acra-4.5.0.jar" target-dir="libs" />
 		<source-file src="android/libs/android-support-v4.jar" target-dir="libs" />
@@ -85,10 +85,10 @@
 		<source-file src="android/libs/ANRWatchDog.jar" target-dir="libs" />
 		<source-file src="android/libs/volley.jar" target-dir="libs" />
 		<source-file src="android/libs/armeabi-v7a/libRtcc-6.2.2.so" target-dir="libs/armeabi-v7a" />
--->		
+		
 		
 		<!-- Resources -->
-<!--
+
 		<source-file src="android/res/animator/weemo_callcontrol_enter.xml" target-dir="res/animator" />
 		<source-file src="android/res/animator/weemo_callcontrol_exit.xml" target-dir="res/animator" />
 		<source-file src="android/res/animator/card_flip_left_in.xml" target-dir="res/animator" />
@@ -289,7 +289,7 @@
 				android:screenOrientation="portrait">
 			</activity>
 		</config-file>
--->
+
 	</platform>
 
 <!-- IOS Settings -->
