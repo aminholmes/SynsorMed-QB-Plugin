@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -63,6 +64,18 @@ import net.rtccloud.sdk.Call.CallStatus;
 import net.rtccloud.sdk.RtccEngine.UserType;
 import com.weemo.phonegap.CallContainer;
 
+import com.quickblox.core.QBSettings;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.exception.QBResponseException;
+import com.quickblox.core.*;
+import com.quickblox.users.model.QBUser;
+import com.quickblox.users.QBUsers;
+import com.quickblox.auth.QBAuth;
+import com.quickblox.auth.model.QBSession;
+import com.quickblox.chat.QBChatService;
+
+
+
 
 
 /**
@@ -84,6 +97,13 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 
 	/** The AudioManager allows us to detect the speaker mode and the wired headset mode */
 	private AudioManager audioManager;
+	
+	static final String APP_ID = "41633";
+	static final String AUTH_KEY = "YKQGUMXRvwtK9kf";
+	static final String AUTH_SECRET = "ND-eQkQxAYAUYpM";
+	static final String ACCOUNT_KEY = "Ky2eW7fR2tqfoDzxgZB1";
+	private static QBChatService chatService;
+		
 
 	/**	Custom Exception */
 	@SuppressWarnings("serial")
@@ -109,11 +129,11 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
 		super.initialize(cordova, webView);
 
-		Rtcc.ensureNativeLoad();
+		/*Rtcc.ensureNativeLoad();
 
 		Rtcc.eventBus().register(this);
 
-		audioManager = (AudioManager) cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);
+		audioManager = (AudioManager) cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);*/
 	}
 
 	@Override
@@ -131,11 +151,15 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 
 	@Override
 	public boolean execute(String action, CordovaArgs args, CallbackContext callback) throws JSONException {
+		Log.d("AminLog", "The string action is: " + action);
 		try {
-			if ("initialize".equals(action))
-				initialize(callback, args.getString(0));
-			else if ("authent".equals(action))
-				authent(callback, args.getString(0), args.getInt(1));
+			if ("initQB".equals(action))
+				initQB(callback, args.getString(0));
+			else if ("authent".equals(action)){
+				Log.d("AminLog","I am about to go to the authent function");
+				//authent(callback, args.getString(0), args.getInt(1));
+				authent(callback, args.getString(0));
+				}
 			else if ("setDisplayName".equals(action))
 				setDisplayName(callback, args.getString(0));
 			else if ("getStatus".equals(action))
@@ -263,6 +287,43 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 
 
     }
+    
+    	/**
+	 * Initialise the Weemo engine 
+	 * @param callback The callback to notify
+	 * @param appId The Weemo APPlication IDentifier
+	 */
+	private void initQB(CallbackContext callback, String appId) throws DirectError{
+
+        connectionCallback = callback;
+        
+        Log.d("AminLog", "I made it to initQB");
+        
+		QBSettings.getInstance().init(this.cordova.getActivity().getApplicationContext(), APP_ID, AUTH_KEY, AUTH_SECRET);
+		QBSettings.getInstance().setAccountKey(ACCOUNT_KEY);
+		callback.success();
+/*
+        if(Rtcc.instance() == null){
+            Log.d("AminLog", "The instance is null in init method");
+        }
+
+        if(Rtcc.getEngineStatus() == RtccEngine.Status.UNDEFINED || Rtcc.instance() == null){
+            Log.d("AminLog","Engine not initialized so about to initialize");
+            Rtcc.initialize(appId, cordova.getActivity());
+            if(Rtcc.getEngineStatus() == RtccEngine.Status.UNDEFINED){
+                Log.d("AminLog","Ran Rtcc Init but engine still undefined");
+                callback.success();
+            }else{
+                Log.d("AminLog","Ran Rtcc Init and was successful :" + Rtcc.getEngineStatus());
+                //callback.success();
+            }
+        }else{
+            Log.d("AminLog","RTCC engine is already initialized");
+            callback.success();
+        }
+        */
+
+	}
 
 	/**
 	 * Initialise the Weemo engine 
@@ -313,22 +374,113 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 	 * @param type The type of the user
 	 * @throws DirectError error
 	 */
-	private void authent(CallbackContext callback, String token, int type) throws DirectError {
+	private void authent(CallbackContext callback, String userID) throws DirectError {
 		Log.d("AminLog","I am about to authenticate");
         authenticationCallback = callback;
-		RtccEngine rtcc = _getEngine();
+        loginQBUser(userID);
 
-        if(Rtcc.getEngineStatus() != RtccEngine.Status.AUTHENTICATED) {
+	}
+	
+	private void loginQBUser(String loginID){
+	
+		String login = loginID;
+		String password = login.concat("password"); 
+ 
+		final QBUser user = new QBUser(login, password);
+ 
+		// CREATE SESSION WITH USER
+		// If you use create session with user data,  
+		// then the user will be logged in automatically
+		QBAuth.createSession(login, password, new QBEntityCallback<QBSession>() {
+		   @Override
+		   public void onSuccess(QBSession session, Bundle bundle) {
+		   
+		   		Log.d("AminLog","Successfully created auth session in QB");
+ 
+			  user.setId(session.getUserId());                
+ 
+			  // INIT CHAT SERVICE
+			  chatService = QBChatService.getInstance();
+ 
+			  // LOG IN CHAT SERVICE
+			  chatService.login(user, new QBEntityCallback<QBUser>() {
+ 
+				 @Override
+				 public void onSuccess(QBUser result, Bundle bundle) {
+					// success
+					Log.d("AminLog","Successfully logged into QB chat");
+					authenticationCallback.success();
+				 }
+ 
+				 @Override
+				 public void onError(QBResponseException errors) {
+					//error
+					Log.d("AminLog","Failed logging into QB chat");
+					String errorString = "";
+					for (String s : errors.getErrors())
+						{
+    					errorString += s + "\t";
+						}
+					authenticationCallback.error(errorString);
+				 }
+			  });
+		   }
+ 
+		   @Override
+		   public void onError(QBResponseException errors) {
+			  //error
+			  Log.d("AminLog","Failed created auth session in QB. Try to register new user");
+			  String errorString = "";
+			  for (String s : errors.getErrors())
+						{
+    					errorString += s + "\t";
+						}
+				registerQBUser(user);
+		   }
+		});
+	
+	}
+	
+	private void registerQBUser(QBUser user){
+	
+		final QBUser myuser = user;
+		QBAuth.createSession(new QBEntityCallbackImpl<QBSession>() {
+			@Override
+			public void onSuccess(QBSession session, Bundle params) {
+				
+				try{
+					//If session was created, try to register new user
+					QBUsers.signUp(myuser);
+					//If registration was successful, retry logging in with user
+					loginQBUser(myuser.getLogin());
+				}catch(QBResponseException errors){
+									
+					Log.d("AminLog","Failed signing up new user");
+					String errorString = "";
+					for (String s : errors.getErrors())
+					{
+						errorString += s + "\t";
+					}
+					authenticationCallback.error(errorString);
+					
+				}
+				
+			}
 
-            final Activity activity = this.cordova.getActivity();
-            final Resources res = activity.getResources();
-            final int isTabletIdentifier = res.getIdentifier("isTablet", "bool", activity.getPackageName());
-            //int deviceType = res.getBoolean(isTabletIdentifier) ? MUCLConstants.DeviceType.DEVICETYPE_APAD : MUCLConstants.DeviceType.DEVICETYPE_APHONE;
-            //weemo.authenticate(token, type == 0 ? UserType.INTERNAL : UserType.EXTERNAL, deviceType);
-            rtcc.authenticate(activity, token, UserType.INTERNAL);
-        }else{
-            callback.success();
-        }
+			@Override
+			public void onError(QBResponseException errors) {
+				// errors
+				Log.d("AminLog","Failed creating session to register user user");
+				String errorString = "";
+				for (String s : errors.getErrors())
+				{
+					errorString += s + "\t";
+				}
+				authenticationCallback.error(errorString);
+				}
+		});
+
+	
 	}
 
 	/**
