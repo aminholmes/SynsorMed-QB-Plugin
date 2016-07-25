@@ -876,6 +876,9 @@ NSInteger QBRTCGetCpuUsagePercentage() {
 		[QBRTCSoundRouter instance].currentSoundRoute = QBRTCSoundRouteSpeaker;
 	}
 	
+	//Forces audio to go through speaker at beginning of the call
+	[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: nil];
+	
 	//Start the CallTimer
 	
 	if (!self.callTimer) {
