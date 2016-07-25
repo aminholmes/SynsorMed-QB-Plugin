@@ -283,16 +283,16 @@
 	 * Disconnects from Weemo.
 	 * Weemo.onConnectionChanged will then be called with Weemo.Error.CLOSED
 	 */
-	Weemo.disconnect = function() {
-		exec(null, null, "weemo", "disconnect", []);
+	videoPlugin.disconnect = function() {
+		exec(null, null, "videoPlugin", "disconnect", []);
 	};
 
 	/**
 	 * Ask the device to change IN audio route
 	 * @param Boolean speakers Whether or not the audio will go through external speakers
 	 */
-	Weemo.setAudioRoute = function(speakers) {
-		exec(null, null, "weemo", "setAudioRoute", [speakers]);
+	videoPlugin.setAudioRoute = function(speakers) {
+		exec(null, null, "videoPlugin", "setAudioRoute", [speakers]);
 	};
 	
 	/**

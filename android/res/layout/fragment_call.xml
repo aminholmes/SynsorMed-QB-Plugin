@@ -41,13 +41,15 @@
         android:background="@android:color/black"
         android:visibility="invisible" >
 
-        <net.rtccloud.sdk.view.VideoInFrame
+        <com.weemo.phonegap.RTCGLVideoView
             android:id="@+id/video_in_master"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
-        <net.rtccloud.sdk.view.VideoOutPreviewFrame
+        <com.weemo.phonegap.RTCGLVideoView
+        	xmlns:android="http://schemas.android.com/apk/res/android"
+   	 		xmlns:custom="http://schemas.android.com/apk/res-auto"
             android:id="@+id/video_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

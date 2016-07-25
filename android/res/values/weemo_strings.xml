@@ -21,7 +21,6 @@
     <!-- Form actions -->
     <string name="action_log_in"><b>Log in</b></string>
     <string name="action_cancel"><b>Cancel</b></string>
-    <string name="action_log_out">Log out</string>
     <string name="action_message">Message</string>
     <string name="action_check">Check</string>
     <string name="action_call_video"><b>Video Call</b></string>

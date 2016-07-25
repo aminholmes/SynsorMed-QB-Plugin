@@ -81,6 +81,24 @@ dispatch_queue_t backgroundQueue = dispatch_queue_create("com.synsormed.findQBID
 	
 }
 
+- (void) disconnect:(CDVInvokedUrlCommand *)command
+{
+	
+	[[QBChat instance] disconnectWithCompletionBlock:^(NSError * _Nullable error) {
+		
+		if(!error){
+			NSLog(@"I was able to disconnect from QBChat without error");
+		}else{
+			NSLog(@"Error disconnecting from QBChat: %@",error);
+		}
+		
+	}];
+	
+	[[self commandDelegate]sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Disconnected"]
+								 callbackId:command.callbackId];
+	
+}
+
 - (void) loginQBUser:(NSString *) loginID
 {
 	

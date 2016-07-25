@@ -3,6 +3,7 @@ package com.weemo.phonegap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaArgs;
@@ -48,6 +49,7 @@ import com.weemo.sdk.impl.MUCLConstants;
 import com.weemo.phonegap.CallFragment.TouchType;
 import com.weemo.phonegap.floating.FloatingWindow;
 */
+import com.quickblox.videochat.webrtc.view.QBRTCVideoTrack;
 import com.weemo.phonegap.RtccCallFragment;
 import com.weemo.phonegap.RtccCallActivity;
 
@@ -73,7 +75,25 @@ import com.quickblox.users.QBUsers;
 import com.quickblox.auth.QBAuth;
 import com.quickblox.auth.model.QBSession;
 import com.quickblox.chat.QBChatService;
+import com.quickblox.chat.QBSignaling;
+import com.quickblox.chat.QBWebRTCSignaling;
+import com.quickblox.chat.listeners.QBVideoChatSignalingManagerListener;
+import com.quickblox.videochat.webrtc.AppRTCAudioManager;
+import com.quickblox.videochat.webrtc.QBRTCClient;
+import com.quickblox.videochat.webrtc.QBRTCConfig;
+import com.quickblox.videochat.webrtc.QBRTCSession;
+import com.quickblox.videochat.webrtc.QBRTCTypes;
+import com.quickblox.videochat.webrtc.QBSignalingSpec;
+import com.quickblox.videochat.webrtc.callbacks.QBRTCClientSessionCallbacks;
+import com.quickblox.videochat.webrtc.callbacks.QBRTCClientVideoTracksCallbacks;
+import com.quickblox.videochat.webrtc.callbacks.QBRTCSessionConnectionCallbacks;
+import com.quickblox.videochat.webrtc.callbacks.QBRTCSignalingCallback;
+import com.quickblox.videochat.webrtc.callbacks.QBRTCStatsReportCallback;
+import com.quickblox.videochat.webrtc.exception.QBRTCException;
+import com.quickblox.videochat.webrtc.exception.QBRTCSignalException;
+import com.quickblox.videochat.webrtc.callbacks.QBRTCClientVideoTracksCallbacks;
 
+import com.quickblox.sample.groupchatwebrtc.activities.CallActivity;
 
 
 
@@ -81,7 +101,7 @@ import com.quickblox.chat.QBChatService;
 /**
  *	Core plugin of the app.
  */
-public class RtccAndroidPhonegap extends CordovaPlugin {
+public class RtccAndroidPhonegap extends CordovaPlugin implements QBRTCClientSessionCallbacks, QBRTCClientVideoTracksCallbacks, QBRTCSessionConnectionCallbacks{
 
 	/**	Callback linked to connection events */
 	private CallbackContext connectionCallback = null;
@@ -89,8 +109,9 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 	private CallbackContext authenticationCallback = null;
 	/**	Callback linked to callWindow events */
 	private CallbackContext callWindowCallback = null;
-	private static Boolean isProvider=false;
-	private static Boolean isDataAvailable=false;
+    private CallbackContext createCallCallback = null;
+	private  static Boolean isProvider=false;
+	private  static Boolean isDataAvailable=false;
 
 	/**	Callback map containing their status */
 	private Map<String, CallbackContext> statusCallbacks = new HashMap<String, CallbackContext>();
@@ -102,7 +123,14 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 	static final String AUTH_KEY = "YKQGUMXRvwtK9kf";
 	static final String AUTH_SECRET = "ND-eQkQxAYAUYpM";
 	static final String ACCOUNT_KEY = "Ky2eW7fR2tqfoDzxgZB1";
-	private static QBChatService chatService;
+	private QBChatService chatService;
+	private QBRTCClient rtcClient;
+	private QBRTCSession currentSession;
+    private int currentPatientID;
+    private boolean hasRemoteTrack = false;
+    private boolean hasLocalTrack = false;
+    private static QBRTCVideoTrack currentLocalTrack =  null;
+    private static QBRTCVideoTrack currentRemoteTrack = null;
 		
 
 	/**	Custom Exception */
@@ -136,6 +164,7 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 		audioManager = (AudioManager) cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);*/
 	}
 
+
 	@Override
 	public void onDestroy() {
 
@@ -152,14 +181,17 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 	@Override
 	public boolean execute(String action, CordovaArgs args, CallbackContext callback) throws JSONException {
 		Log.d("AminLog", "The string action is: " + action);
+		Log.d("call_session", "The string action is: " + action);
 		try {
+			Log.d("call_session", " entered try");
 			if ("initQB".equals(action))
 				initQB(callback, args.getString(0));
-			else if ("authent".equals(action)){
-				Log.d("AminLog","I am about to go to the authent function");
-				//authent(callback, args.getString(0), args.getInt(1));
+			else if ("authent".equals(action)){	
 				authent(callback, args.getString(0));
-				}
+			}
+			else if ("acceptCall".equals(action)){
+				acceptCall(callback);
+			}
 			else if ("setDisplayName".equals(action))
 				setDisplayName(callback, args.getString(0));
 			else if ("getStatus".equals(action))
@@ -204,8 +236,36 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 				resume(callback, args.getInt(0));
 			}
 				
-			else if ("hangup".equals(action))
+			else if ("hangup".equals(action)){
+				Log.d("call_session", "hangup short entered");
 				hangup(callback, args.getInt(0));
+			}
+
+			else if ("hangUp".equals(action)){
+				Log.d("call_session", "hangUp entered");
+				final Activity activity = cordova.getActivity();
+				final CallbackContext callbackLocal = callback;
+				final CordovaArgs argsLocal = args;
+				Log.d("AminLog", "Amin is in the display Call Window");
+
+
+				int callId = 0;
+				try
+				{
+					callId = argsLocal.getInt(0);
+				}
+				catch(Exception e){
+					Log.d("call_session", "argsLocal callid issue");
+				}
+
+				final int  callIdFinal = callId;
+				activity.runOnUiThread(new Runnable() {
+					@Override public void run() {
+						hangup(callbackLocal, callIdFinal);
+					}
+				});
+			}
+
 			else if ("displayCallWindow".equals(action))
 			{
 				// displayCallWindow(callback, args.getInt(0), args.getBoolean(1));
@@ -228,10 +288,12 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 				return false;
 		}
 		catch (DirectError e) {
+			Log.d("call_session", "DirectError =?>" + e);
 			callback.error(e.getCode());
 		}
 		return true;
 	}
+
 	
 	private void getNetworkType(CallbackContext callback){
 		TelephonyManager tm = (TelephonyManager) cordova.getActivity().getSystemService(Context.TELEPHONY_SERVICE);
@@ -247,12 +309,23 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 
 		}
 	}
-	
+
+    public QBRTCVideoTrack getCurrentRemoteTrack(){
+        return currentRemoteTrack;
+    }
+
+    public QBRTCVideoTrack getCurrentLocalTrack(){
+        return currentLocalTrack;
+    }
+
+
+
 	public static Boolean isProvider()
 	{
 		return isProvider;
 	}
-	
+
+
 	public static Boolean isDataAvailable()
 	{
 		return isDataAvailable;
@@ -295,9 +368,11 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 	 */
 	private void initQB(CallbackContext callback, String appId) throws DirectError{
 
+
         connectionCallback = callback;
         
         Log.d("AminLog", "I made it to initQB");
+		Log.d("call_session", "initQB");
         
 		QBSettings.getInstance().init(this.cordova.getActivity().getApplicationContext(), APP_ID, AUTH_KEY, AUTH_SECRET);
 		QBSettings.getInstance().setAccountKey(ACCOUNT_KEY);
@@ -376,10 +451,16 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 	 */
 	private void authent(CallbackContext callback, String userID) throws DirectError {
 		Log.d("AminLog","I am about to authenticate");
+		Log.d("call_session", "authent");
         authenticationCallback = callback;
         loginQBUser(userID);
 
 	}
+	/**
+	*
+	* Log in the QB user
+	*
+	**/
 	
 	private void loginQBUser(String loginID){
 	
@@ -409,6 +490,8 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 				 public void onSuccess(QBUser result, Bundle bundle) {
 					// success
 					Log.d("AminLog","Successfully logged into QB chat");
+					//Now that we are successfully logged in, init the RTCClient
+					initQBRTCClient();
 					authenticationCallback.success();
 				 }
  
@@ -440,7 +523,11 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 		});
 	
 	}
-	
+	/**
+	*
+	*Use this to register a new QB user if user not found during login
+	*
+	*/
 	private void registerQBUser(QBUser user){
 	
 		final QBUser myuser = user;
@@ -482,6 +569,77 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 
 	
 	}
+	
+	
+	private void initQBRTCClient() {
+        rtcClient = QBRTCClient.getInstance(this.cordova.getActivity().getApplicationContext());
+        // Add signalling manager
+        QBChatService.getInstance().getVideoChatWebRTCSignalingManager().addSignalingManagerListener(new QBVideoChatSignalingManagerListener() {
+            @Override
+            public void signalingCreated(QBSignaling qbSignaling, boolean createdLocally) {
+                if (!createdLocally) {
+                    rtcClient.addSignaling((QBWebRTCSignaling) qbSignaling);
+                }
+            }
+        });
+/*
+        rtcClient.setCameraErrorHendler(new VideoCapturerAndroid.CameraErrorHandler() {
+            @Override
+            public void onCameraError(final String s) {
+                CallActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toaster.longToast(s);
+                    }
+                });
+            }
+        });
+*/
+
+        // Configure
+        //
+        QBRTCConfig.setMaxOpponentsCount(6);
+        QBRTCConfig.setDisconnectTime(30);
+        QBRTCConfig.setAnswerTimeInterval(30l);
+        QBRTCConfig.setStatsReportInterval(60);
+        QBRTCConfig.setDebugEnabled(true);
+
+
+        // Add activity as callback to RTCClient
+        rtcClient.addSessionCallbacksListener(this);
+        
+        rtcClient.addConnectionCallbacksListener(this);
+        // Start mange QBRTCSessions according to VideoCall parser's callbacks
+        rtcClient.prepareToProcessCalls();
+
+        /*QBChatService.getInstance().addConnectionListener(new AbstractConnectionListener() {
+
+            @Override
+            public void connectionClosedOnError(Exception e) {
+                showNotificationPopUp(R.string.connection_was_lost, true);
+            }
+
+            @Override
+            public void reconnectionSuccessful() {
+                showNotificationPopUp(R.string.connection_was_lost, false);
+            }
+
+            @Override
+            public void reconnectingIn(int seconds) {
+                Log.i(TAG, "reconnectingIn " + seconds);
+            }
+        });
+        */
+    }
+    
+    private void acceptCall(CallbackContext callback) throws DirectError
+    {
+    
+    	displayCallWindow(callback, 0, false);
+    	
+    	callback.success();
+    
+    }
 
 	/**
 	 * Set the display name used by the application for the authenticated user
@@ -507,6 +665,19 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 		rtcc.getStatus(userID);
 	}
 
+	private void findQBIDFor(String login){
+
+		try {
+
+			QBUser thePatient = QBUsers.getUserByLogin(login);
+			Log.d("AminLog","I found the patient ID: " + thePatient.getId());
+            currentPatientID = thePatient.getId();
+		} catch (QBResponseException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	/**
 	 * Creates a call whose recipient is contactID.
 	 * @param callback The callback to notify
@@ -514,9 +685,37 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 	 * @throws DirectError error
 	 */
 	private void createCall(CallbackContext callback, String userID) throws DirectError {
-		RtccEngine rtcc = _getEngine();
-		rtcc.createCall(userID);
+		/*RtccEngine rtcc = _getEngine();
+		rtcc.createCall(userID);*/
+
+        createCallCallback = callback;
+
+		Log.d("tracks","createCall userID: " + userID);
+		QBRTCTypes.QBConferenceType qbConferenceType = QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_VIDEO;
+        findQBIDFor(userID);
+
+        Log.d("tracks","I am about to try to call: " + currentPatientID);
+
+        //Initiate opponents list
+        List<Integer> opponents = new ArrayList<Integer>();
+		opponents.add(currentPatientID);
+
+
+        //Init session
+        QBRTCSession session =
+                QBRTCClient.getInstance(this.cordova.getActivity().getApplicationContext()).createNewSessionWithOpponents(opponents, qbConferenceType);
+
+
+
+        currentSession = session;
+
+//        currentSession.addVideoTrackCallbacksListener(this);
+
+        webView.sendJavascript("videoPlugin.internal.callCreated('0', 'PROCEEDING');");
+
+        //webView.loadUrl("javascript:videoPlugin.internal.callCreated('0', 'PROCEEDING');");
 		callback.success();
+		displayCallWindow(createCallCallback, 0, false);
 	}
 
 
@@ -528,6 +727,7 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 
         if(Rtcc.getEngineStatus() != RtccEngine.Status.UNDEFINED){
             Log.d("AminLog","I am in java disconnect");
+			Log.d("call_session","I am in java disconnect");
             Rtcc.instance().disconnect();
         }
 		callback.success();
@@ -580,14 +780,43 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 	 * @param callID Resume the call if it was paused. Pick it up if it is ringing.
 	 * @throws DirectError error
 	 */
-	private void hangup(CallbackContext callback, int callID) throws DirectError {
-		removeCallFragment();
-		Call mycall = _getCall(callID);
-		if(mycall.getStatus() != CallStatus.ENDED){
-			mycall.hangup();
+
+	private void hangup(CallbackContext callback, int callID){
+
+		Log.d("call_session", "hangup in hangup");
+		try{
+			Log.d("call_session", "hangup");
+
+			if(callID != 0){
+				removeCallFragment();
+				Call mycall = _getCall(callID);
+				if(mycall.getStatus() != CallStatus.ENDED){
+					mycall.hangup();
+				}
+			}
+
+			clearSession();
+			clearLocalSession();
+			callback.success();
 		}
-		callback.success();
+		catch(Exception e){
+			Log.d("call_session", "hangup exceptin -->" + e);
+		}
+
 	}
+
+	private void clearSession(){
+		rtcClient.getInstance(this.cordova.getActivity().getApplicationContext()).destroy();
+
+		//Log out of chat service
+		QBChatService.getInstance().destroy();
+	}
+
+	private static void clearLocalSession(){
+		isProvider = false;
+	}
+
+
 	
 	/**
 	 * Remove the {@link CallFragment} from the Activity if there is one
@@ -611,14 +840,17 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 		final Activity activity = cordova.getActivity();
 		callWindowCallback = callback;
 		Log.d("AminLog", "Amin is in the display Call Window");
+		final String sessionID = currentSession.getSessionID();
 		activity.runOnUiThread(new Runnable() {
 			@Override public void run() {
 				//Remove CallFragment if it already exists
-				removeCallFragment();
+				//removeCallFragment();
 				
-				Intent intent = new Intent(cordova.getActivity(), RtccCallActivity.class);
+				//Intent intent = new Intent(cordova.getActivity(), RtccCallActivity.class);
+				Intent intent = new Intent(cordova.getActivity(), com.quickblox.sample.groupchatwebrtc.activities.CallActivity.class);
 				intent.putExtra("canComeBack", canComeBack);
-				intent.putExtra("callId", callId);
+				intent.putExtra("callId", sessionID);
+                intent.putExtra("isProvider",isProvider);
 				cordova.startActivityForResult(RtccAndroidPhonegap.this, intent, 2142);
 			}
 		});
@@ -715,6 +947,7 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 		if (requestCode == 2142 && callWindowCallback != null) {
 			callWindowCallback.success();
 			callWindowCallback = null;
+
 		}
 	}
 
@@ -918,5 +1151,150 @@ public class RtccAndroidPhonegap extends CordovaPlugin {
 		Log.i("JAVASCRIPT", "Weemo.internal.videoInChanged(" + e.getCall().getCallId() + ", " + (e.isReceivingVideo() ? "true" : "false") + ");");
 		webView.sendJavascript("Weemo.internal.videoInChanged(" + e.getCall().getCallId() + ", " + (e.isReceivingVideo() ? "true" : "false") + ");");
 	}*/
+
+
+	public void endCallJS(){
+		clearLocalSession();
+		webView.sendJavascript("videoPlugin.internal.callStatusChanged('0', \'ENDED\');");
+	}
+	
+	
+	/*------------- Callbacks for QBRTC -----------------*/
+		/**
+	 * Called in case when connection establishment process is started
+	 */
+	 @Override
+	public void onStartConnectToUser(QBRTCSession session, Integer userID){}
+ 
+	/**
+	 * Called in case when connection with the opponent is established
+	 */
+	 @Override
+	public void onConnectedToUser(QBRTCSession session, Integer userID){
+	
+		Log.d("AminLog","Connected to user in native plugin file");
+		if(currentSession == session)
+		webView.sendJavascript("videoPlugin.internal.callCreated(0, \'ACTIVE\');");
+		
+	}
+ 
+	/**
+	 * Called in case when connection is closed
+	 */
+	 @Override
+	public void onConnectionClosedForUser(QBRTCSession session, Integer userID){}
+ 
+	/**
+	 * Called in case when the opponent is disconnected
+	 */
+
+	 @Override
+	public void onDisconnectedFromUser(QBRTCSession session, Integer userID){}
+ 
+	/**
+	 * Called in case when the opponent is disconnected by timeout
+	 */
+	 @Override
+	public void onDisconnectedTimeoutFromUser(QBRTCSession session, Integer userID){}
+ 
+	/**
+	 * Called in case when connection has failed with the opponent
+	 */
+	 @Override
+	public void onConnectionFailedWithUser(QBRTCSession session, Integer userID){}
+ 
+	/**
+	 * Called in case of some errors occurred during connection establishment process
+	 */
+	 @Override
+	public void onError(QBRTCSession session, QBRTCException exception){}
+	
+	
+		/**
+	 * Called each time when new session request is received.
+	 */
+	 @Override
+	public void onReceiveNewSession(QBRTCSession session)
+	{
+		Log.d("AminLog","Received new session in native plugin file. Someone is calling");
+		currentSession = session;
+		currentSession.addSessionCallbacksListener(this);
+		//Tell JS the session is ringing
+		webView.sendJavascript("videoPlugin.internal.callCreated(0, \'RINGING\');");
+			//[[self commandDelegate]evalJs:[NSString stringWithFormat:@"videoPlugin.internal.callCreated(%d, \"%@\");", 0, @"RINGING"]];
+	
+	}
+ 
+	/**
+	 * Called in case when user didn't answer in timer expiration period
+	 */
+	 @Override
+	public void onUserNotAnswer(QBRTCSession session, Integer userID){}
+ 
+	/**
+	 * Called in case when opponent has rejected you call
+	 */
+	 @Override
+	public void onCallRejectByUser(QBRTCSession session, Integer userID, Map<String, String> userInfo){}
+ 
+	/**
+	 * Called in case when opponent has accepted you call
+	 */
+	 @Override
+	public void onCallAcceptByUser(QBRTCSession session, Integer userID, Map<String, String> userInfo){
+
+         currentSession = session;
+
+
+
+         //Display the call window once the user accepts
+//         displayCallWindow(createCallCallback, 0, false);
+
+     }
+ 
+	/**
+	 * Called in case when opponent hung up
+	 */
+	 @Override
+	 public void onReceiveHangUpFromUser(QBRTCSession session, Integer userID, Map<String,String> userInfo){}
+ 
+	/**
+	 * Called in case when user didn't make any actions on received session
+	 */
+	 @Override
+	public void onUserNoActions(QBRTCSession session, Integer userID){}
+ 
+	/**
+	 * Called in case when session will close
+	 */
+	@Override
+	public void onSessionStartClose(QBRTCSession session){
+	}
+ 
+	/**
+	 * Called when session is closed.
+	 */
+	 @Override
+	public void onSessionClosed(QBRTCSession session){
+
+         Log.d("AminLog","I am in the plugin and saw that the session closed");
+         endCallJS();
+     }
+
+    @Override
+    public void onLocalVideoTrackReceive(QBRTCSession qbrtcSession, final QBRTCVideoTrack videoTrack) {
+
+        Log.d("AminLog","I have received local track inside plugin");
+        hasLocalTrack = true;
+        currentLocalTrack = videoTrack;
+    }
+
+    @Override
+    public void onRemoteVideoTrackReceive(QBRTCSession session, QBRTCVideoTrack videoTrack, Integer userID) {
+
+        Log.d("AminLog","I have received remote track inside plugin");
+        hasRemoteTrack = true;
+        currentRemoteTrack = videoTrack;
+    }
 
 }
