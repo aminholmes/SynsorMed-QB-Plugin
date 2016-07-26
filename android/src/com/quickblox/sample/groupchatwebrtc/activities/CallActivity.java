@@ -125,14 +125,16 @@ public class CallActivity extends BaseLogginedUserActivity implements QBRTCClien
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
+        initQBRTCClient();
+        initAudioManager();
+
         if(isProvider){
             showCallRequestAlert();
             addConversationFragmentStartCall();
         }else{
             addConversationFragmentReceiveCall();
         }
-        initQBRTCClient();
-        initAudioManager();
+
 
         /*
         initWiFiManagerListener();
@@ -204,8 +206,7 @@ public class CallActivity extends BaseLogginedUserActivity implements QBRTCClien
         QBRTCConfig.setStatsReportInterval(10);
         QBRTCConfig.setDebugEnabled(true);
 
-        QBRTCMediaConfig.setVideoFps(25);
-        QBRTCMediaConfig.setVideoHWAcceleration(true);
+
 
 
         // Add activity as callback to RTCClient
@@ -710,13 +711,16 @@ public class CallActivity extends BaseLogginedUserActivity implements QBRTCClien
             //ArrayList<QBUser> opponents = DataHolder.getUsersByIDs(opponentsWithoutMe.toArray(new Integer[opponentsWithoutMe.size()]));
             ArrayList<QBUser> opponents = new ArrayList<QBUser>();
             opponents.add(myOpponent);
-            SettingsUtil.setSettingsStrategy(opponents, getDefaultSharedPrefs(), this);
+            //SettingsUtil.setSettingsStrategy(opponents, getDefaultSharedPrefs(), this);
+            QBRTCMediaConfig.setVideoFps(20);
+            QBRTCMediaConfig.setVideoStartBitrate(2000);
+            QBRTCMediaConfig.setVideoHWAcceleration(true);
             ConversationFragment fragment = ConversationFragment.newInstance(opponents,
                     DataHolder.getUserNameByID(session.getCallerID()),
                     session.getConferenceType(), session.getUserInfo(),
                     StartConversetionReason.OUTCOME_CALL_MADE, getCurrentSession().getSessionID());
             // Start conversation fragment
-            //audioManager.init();
+            audioManager.init();
             FragmentExecuotr.addFragment(getFragmentManager(), R.id.fragment_container, fragment, CONVERSATION_CALL_FRAGMENT);
         }
     }
@@ -766,13 +770,16 @@ public class CallActivity extends BaseLogginedUserActivity implements QBRTCClien
             //ArrayList<QBUser> opponents = DataHolder.getUsersByIDs(opponentsWithoutMe.toArray(new Integer[opponentsWithoutMe.size()]));
             ArrayList<QBUser> opponents = new ArrayList<QBUser>();
             opponents.add(myOpponent);
-            SettingsUtil.setSettingsStrategy(opponents, getDefaultSharedPrefs(), this);
+            //SettingsUtil.setSettingsStrategy(opponents, getDefaultSharedPrefs(), this);
+            QBRTCMediaConfig.setVideoFps(20);
+            QBRTCMediaConfig.setVideoStartBitrate(2000);
+            QBRTCMediaConfig.setVideoHWAcceleration(true);
             ConversationFragment fragment = ConversationFragment.newInstance(opponents,
                     DataHolder.getUserNameByID(session.getCallerID()),
                     session.getConferenceType(), session.getUserInfo(),
                     StartConversetionReason.INCOME_CALL_FOR_ACCEPTION, getCurrentSession().getSessionID());
             // Start conversation fragment
-            //audioManager.init();
+            audioManager.init();
             FragmentExecuotr.addFragment(getFragmentManager(), R.id.fragment_container, fragment, CONVERSATION_CALL_FRAGMENT);
         }
     }
