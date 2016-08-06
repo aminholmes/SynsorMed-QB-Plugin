@@ -161,7 +161,7 @@ public class CallActivity extends BaseLogginedUserActivity implements QBRTCClien
                 //Toaster.longToast("Audio device swicthed to  " + audioDevice);
             }
         });
-        audioManager.setDefaultAudioDevice(AppRTCAudioManager.AudioDevice.EARPIECE);
+        audioManager.setDefaultAudioDevice(AppRTCAudioManager.AudioDevice.SPEAKER_PHONE);
         audioManager.setOnWiredHeadsetStateListener(new AppRTCAudioManager.OnWiredHeadsetStateListener() {
             @Override
             public void onWiredHeadsetStateChanged(boolean plugged, boolean hasMicrophone) {
