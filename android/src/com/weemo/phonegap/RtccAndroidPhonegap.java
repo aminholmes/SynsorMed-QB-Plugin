@@ -168,13 +168,16 @@ public class RtccAndroidPhonegap extends CordovaPlugin implements QBRTCClientSes
 	@Override
 	public void onDestroy() {
 
-
+	/*****Commented because we don't use Rtcc engine anymore. Was causing error: Amin 10/10/16
+	
         if (Rtcc.getEngineStatus() != RtccEngine.Status.UNDEFINED.UNDEFINED) {
             Log.d("AminLog","About to disconnect RTCC on destroy");
             Rtcc.instance().disconnect();
         }
 
 		Rtcc.eventBus().unregister(this);
+	*/
+		
 		super.onDestroy();
 	}
 
