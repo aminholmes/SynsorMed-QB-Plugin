@@ -388,6 +388,16 @@
 		<framework src="com.android.support:support-v4:21+" />
 
 
+		<config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+    			<array>
+        			<string>SynsorMed uses your camera for secure virtual visits</string>
+    			</array>
+		</config-file>
+		<config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
+    			<array>
+        			<string>SynsorMed uses your microphone for secure virtual visits</string>
+    			</array>
+		</config-file>
 		<config-file target="res/xml/config.xml" parent="/*">
 			<feature name="videoPlugin">
 				<param name="android-package" value="com.weemo.phonegap.RtccAndroidPhonegap" />
