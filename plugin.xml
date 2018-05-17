@@ -164,7 +164,7 @@
 		<source-file src="android/res/drawable/ic_toggle_dynamic.xml" target-dir="res/drawable" />
 		<source-file src="android/res/drawable/ic_toggle_mic.xml" target-dir="res/drawable" />
 		<source-file src="android/res/drawable/ic_user_camera_off.png" target-dir="res/drawable" />
-		<source-file src="android/res/drawable/icon.png" target-dir="res/drawable" />
+		<source-file src="android/res/drawable/sm_icon.png" target-dir="res/drawable" />
 		<source-file src="android/res/drawable/rectangle_rounded_blue_green.xml" target-dir="res/drawable" />
 		<source-file src="android/res/drawable/rectangle_rounded_blue_krayola.xml" target-dir="res/drawable" />
 		<source-file src="android/res/drawable/rectangle_rounded_blue.xml" target-dir="res/drawable" />
