@@ -56,8 +56,8 @@ import android.util.Log;
 import android.content.Intent;
 import android.graphics.Matrix.ScaleToFit;
 
-//import com.synsormed.mobile.MainActivity;
-import com.synsormed.mobile.Synsormed;
+import com.synsormed.mobile.MainActivity;
+//import com.synsormed.mobile.Synsormed;
 import com.weemo.phonegap.CallContainer;
 import com.weemo.phonegap.RtccAndroidPhonegap;
 
@@ -377,8 +377,8 @@ import com.weemo.phonegap.RtccAndroidPhonegap;
 
 	private void switchToWebView()
 	{
-		//Intent intent=new Intent(getActivity(), MainActivity.class);
-		Intent intent=new Intent(getActivity(), Synsormed.class);
+		Intent intent=new Intent(getActivity(), MainActivity.class);
+		//Intent intent=new Intent(getActivity(), Synsormed.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
         startActivity(intent);
          // getActivity().moveTaskToBack(true);
