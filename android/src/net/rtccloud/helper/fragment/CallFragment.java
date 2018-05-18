@@ -58,7 +58,7 @@ import android.graphics.Matrix.ScaleToFit;
 
 //import com.synsormed.mobile.MainActivity;
 //import com.synsormed.mobile.Synsormed;
-import com.synsormed.mobile.CordovaApp;
+//import com.synsormed.mobile.CordovaApp;
 import com.weemo.phonegap.CallContainer;
 import com.weemo.phonegap.RtccAndroidPhonegap;
 
@@ -380,9 +380,11 @@ import com.weemo.phonegap.RtccAndroidPhonegap;
 	{
 		//Intent intent=new Intent(getActivity(), MainActivity.class);
 		//Intent intent=new Intent(getActivity(), Synsormed.class);
-		Intent intent=new Intent(getActivity(), CordovaApp.class);
+		//Intent intent=new Intent(getActivity(), CordovaApp.class);
+		/*
 		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
         startActivity(intent);
+	*/
          // getActivity().moveTaskToBack(true);
 	}
 
