@@ -34,7 +34,7 @@
 		<source-file src="android/src/com/weemo/phonegap/floating/IFloatingWindowInteraction.java" target-dir="src/com/weemo/phonegap/floating" />
 		<source-file src="android/src/com/weemo/phonegap/floating/IFloatingWindowSettings.java" target-dir="src/com/weemo/phonegap/floating" />
 		<source-file src="android/src/com/weemo/phonegap/floating/SnapLocation.java" target-dir="src/com/weemo/phonegap/floating" />
-		
+	<!--	
 		<source-file src="android/src/net/rtccloud/helper/App.java" target-dir="src/net/rtccloud/helper" />
 		<source-file src="android/src/net/rtccloud/helper/MainActivity.java" target-dir="src/net/rtccloud/helper" />
 		
@@ -76,7 +76,7 @@
 		<source-file src="android/src/net/rtccloud/helper/view/ContactAdapter.java" target-dir="src/net/rtccloud/helper/view" />
 		<source-file src="android/src/net/rtccloud/helper/view/FloatLabelLayout.java" target-dir="src/net/rtccloud/helper/view" />
 		
-		
+		-->
 <!-- This section is for all of the QB files -->
 
 		<source-file src="android/src/com/quickblox/sample/core/CoreApp.java" target-dir="src/com/quickblox/sample/core" />
