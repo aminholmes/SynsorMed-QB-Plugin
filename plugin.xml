@@ -1,7 +1,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	id="com.synsormed.qbplugin"
-	version="1.0.1">
+	version="1.0.2">
 
 
 	<name>QB_Video</name>
@@ -196,7 +196,7 @@
 		<source-file src="android/res/drawable/shape_oval_orange.xml" target-dir="res/drawable" />
 		<source-file src="android/res/drawable/shape_oval_spring_bud.xml" target-dir="res/drawable" />
 		<source-file src="android/res/drawable/shape_oval_water_bondi_beach.xml" target-dir="res/drawable" />
-		<source-file src="android/res/drawable/splash.png" target-dir="res/drawable" />
+		<!--<source-file src="android/res/drawable/splash.png" target-dir="res/drawable" />-->
 		<source-file src="android/res/drawable/statusbar_bg.xml" target-dir="res/drawable" />
 		<source-file src="android/res/drawable/statusbar_btn_selector.xml" target-dir="res/drawable" />
 		<source-file src="android/res/drawable/statusbar_btn_shape_focused.xml" target-dir="res/drawable" />
