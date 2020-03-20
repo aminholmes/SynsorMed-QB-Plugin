@@ -11,6 +11,7 @@ repositories{
 dependencies {
 
 	implementation "com.quickblox:quickblox-android-sdk-videochat-webrtc:3.9.2"
+	implementation 'org.webrtc:google-webrtc:1.0.22672'
 	// implementation ("com.quickblox:quickblox-android-sdk-messages:3.9.2"){
 	// }
 
