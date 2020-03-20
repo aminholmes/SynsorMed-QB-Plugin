@@ -66,7 +66,7 @@ import net.rtccloud.sdk.Call.CallStatus;
 import net.rtccloud.sdk.RtccEngine.UserType;
 import com.weemo.phonegap.CallContainer;
 
-import com.quickblox.core.QBSettings;
+import com.quickblox.auth.session.QBSettings;
 import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.exception.QBResponseException;
 import com.quickblox.core.*;
