@@ -126,8 +126,7 @@
 		<source-file src="android/libs/volley.jar" target-dir="libs" />
 		<!--Old way of using Video
 		<source-file src="android/libs/armeabi-v7a/libjingle_peerconnection_so.so" target-dir="libs/armeabi-v7a" />-->
-
-		<framework src="com.quickblox:quickblox-android-sdk-videochat-webrtc:3.9.2" />
+		<framework src="android/videoPlugin.gradle" custom="true" type="gradleReference"/>
 <!-- 		<source-file src="android/libs/quickblox-android-sdk-core-2.6.jar" target-dir="libs" />
 		<source-file src="android/libs/quickblox-android-sdk-chat-2.6.jar" target-dir="libs" />
 		<source-file src="android/libs/quickblox-android-sdk-videochat-webrtc-2.6.jar" target-dir="libs" /> -->
