@@ -3,7 +3,7 @@
   "description": "",
   "version": "1.0.0",
   "dependencies": {
-    "cordova": "5.*",
+    "cordova": "*",
     "shelljs": "^0.5.1"
   },
   "devDependencies": {
