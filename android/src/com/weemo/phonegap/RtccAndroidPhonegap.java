@@ -119,10 +119,19 @@ public class RtccAndroidPhonegap extends CordovaPlugin implements QBRTCClientSes
 	/** The AudioManager allows us to detect the speaker mode and the wired headset mode */
 	private AudioManager audioManager;
 	
-	static final String APP_ID = "41633";
-	static final String AUTH_KEY = "YKQGUMXRvwtK9kf";
-	static final String AUTH_SECRET = "ND-eQkQxAYAUYpM";
+	//Prod settings
+	// static final String APP_ID = "41633";
+	// static final String AUTH_KEY = "YKQGUMXRvwtK9kf";
+	// static final String AUTH_SECRET = "ND-eQkQxAYAUYpM";
+	// static final String ACCOUNT_KEY = "Ky2eW7fR2tqfoDzxgZB1";
+
+	//Staging settings
+	static final String APP_ID = "72271";
+	static final String AUTH_KEY = "YHvbWXQvPfs6-Yh";
+	static final String AUTH_SECRET = "mjq3hP8xByUfNx4";
 	static final String ACCOUNT_KEY = "Ky2eW7fR2tqfoDzxgZB1";
+
+
 	private QBChatService chatService;
 	private QBRTCClient rtcClient;
 	private QBRTCSession currentSession;
